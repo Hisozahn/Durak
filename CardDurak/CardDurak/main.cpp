@@ -13,6 +13,9 @@
 #define FIGHT_STEP 1
 #define TIMER_REMOVING_TIME 20
 #define TIMER_DELAY ((33 / 10) * 1000 / 200)
+#define RECTANGLE_H 30
+#define RECTANGLE_W 30
+
 const char*const BACKGROUND_IMAGE = "Images/background.bmp";
 const char*const CARDSET_IMAGE = "Images/CardSet.bmp";
 const char*const CARDBACK_1 = "Images/card_back_1.bmp";
@@ -159,6 +162,7 @@ card* create_card_list(Uint8 card_code) {
 	return ptr;
 }
 player_t* create_enemies(Uint8 count) {
+	//player_t* enemies = (player_t*)malloc(sizeof(player_t)*MAX_ENEMIES);
 	static player_t enemies[MAX_ENEMIES];
 	Uint8 i = 0;
 	for (; i < count; i++)
@@ -167,6 +171,7 @@ player_t* create_enemies(Uint8 count) {
 }
 int* create_sizes(int w, int h) {
 	static int sizes[2];
+	//int* sizes = (int*)malloc(sizeof(int)*2);
 	sizes[0] = w;
 	sizes[1] = h;
 	return sizes;
@@ -266,7 +271,7 @@ void card_list_free(card *const* ptr) {
 	card** link_link = (card**)ptr;
 	card* list_link = *(card**)ptr;
 	card* free_ptr;
-	while (list_link != NULL) {
+      	while (list_link->next != NULL) {
 		free_ptr = list_link;
 		list_link = list_link->next;
 		free(free_ptr);
@@ -280,6 +285,7 @@ void player_card_pop(player_t* pl, Uint8 index) {
 void player_card_push(player_t* pl, Uint8 card_code) {
 	if (pl->first_card == NULL) {
 		pl->first_card = create_card_list(card_code);
+		pl->card_count = 1;
 		return;
 	}
 	card_add(card_code, &(pl->first_card));
@@ -332,22 +338,34 @@ void players_zeroing(Uint8 *player_ready, Uint8 *finish_move, Uint8 *step, field
 	for (i = 0; i < 13; i++)
 		field->used[i] = 0;
 }
-void players_next_move(player_t* const player, player_t* const enemies, Uint8 pl, Uint8 *move, Uint8 mode, Uint8 *check_finish) {
+Uint8 players_next_move(player_t* const player, player_t* const enemies, Uint8 pl, Uint8 *move, Uint8 mode, Uint8 *check_finish) {
+	Uint8 contin = 0, i;
 	if (!player->card_count)
 		player->in_game = 0;
-	if (!enemies[pl].card_count)
-		enemies[pl].in_game = 0;
-	if (*move && !enemies[*move - 1].card_count)
-		enemies[*move - 1].in_game = 0;
-	if (pl == 3 && !player->take)
-		*move = 0;
+	else
+		contin++;
+	for (i = 0; i < 3; i++) {
+		if (!enemies[i].card_count)
+			enemies[i].in_game = 0;
+		else
+			contin++;
+	}
+	if (pl == 3 && !player->take) {
+		if (player->in_game)
+			*move = 0;
+		else
+			*move = get_ingame_player(player, enemies, 0, mode) + 1;
+	}
 	else if (pl == 3 && player->take)
 		*move = get_ingame_player(player, enemies, 0, mode) + 1;
 	else if (!enemies[pl].take)
-		*move = (get_ingame_player(player, enemies, pl, mode)) + 1 % 4;
+		*move = ((get_ingame_player(player, enemies, pl, mode)) + 1) % 4;
 	else if (enemies[pl].take)
 		*move = ((get_ingame_player(player, enemies, pl + 1, mode)) + 1) % 4;
 	player->take = enemies[pl].take = *check_finish = 0;
+	if (contin < 2)
+		return 1;
+	return 0;
 }
 void setup(player_t* player, player_t* enemies, player_t* deck, Uint8 mode) {
 	int i;
@@ -570,6 +588,28 @@ void renderTexture_full(SDL_Texture *const tex, SDL_Renderer *const rend, int x,
 		logSDLError("ren_part failed!");
 	}
 }
+void renderMark(SDL_Renderer *const rend, int width, int height, Uint8 mode, Uint8 move) {
+	SDL_Rect rect;
+	if (!move) {
+		rect.x = (width - DECK_PLACE) / 2 - RECTANGLE_W / 2;
+		rect.y = height - RECTANGLE_H - 2;
+	}
+	else if (move == 1 && mode != 1) {
+		rect.x = 5;
+		rect.y = height / 2 - RECTANGLE_H / 2;
+	}
+	else if (move == 2 || (move == 1 && mode == 1)) {
+		rect.x = (width - DECK_PLACE) / 2 - RECTANGLE_W / 2;
+		rect.y = 2;
+	}
+	else if (move == 3) {
+		rect.x = width - DECK_PLACE;
+		rect.y = height / 2 - RECTANGLE_H / 2;
+	}
+	rect.h = RECTANGLE_H;
+	rect.w = RECTANGLE_W;
+	SDL_RenderDrawRect(rend, &rect);
+}
 void renderTexture_part_card(SDL_Texture *const tex, SDL_Renderer *const rend, int x, int y, int xt, int yt){
 	SDL_Rect new_rect, old_rect;
 	old_rect.x = xt;
@@ -765,7 +805,8 @@ static int side(Uint8 mode) {
 				me.checked = get_my_card_by_coordinates(e.button.x, e.button.y, sizes[0], sizes[1], me.card_count);
 			}
 			if (!click && me.checked == UINT8_MAX && e.button.y < sizes[1] - HORIZONTAL_OFFSET - CARD_HEIGHT / 2 + BUTTON_HEIGHT / 2
-				&& e.button.y > sizes[1] - HORIZONTAL_OFFSET - CARD_HEIGHT / 2 - BUTTON_HEIGHT / 2) {
+				&& e.button.y > sizes[1] - HORIZONTAL_OFFSET - CARD_HEIGHT / 2 - BUTTON_HEIGHT / 2
+				&& e.button.x > sizes[0] - DECK_PLACE) {
 				button_click(move, &step, &field, &finish_move, &player_ready, &me.take, pl);
 				click = 1;
 			}
@@ -815,6 +856,7 @@ static int side(Uint8 mode) {
 			render_deck(cardset, card_back2, renderer, deck, sizes[0], sizes[1]);
 			render_field(cardset, renderer, field, sizes[0], sizes[1]);
 			render_button(buttons, renderer, sizes[0], sizes[1], button_num);
+			renderMark(renderer, sizes[0], sizes[1], mode, move);
 			if (movement == 1 && me.checked != UINT8_MAX) {
 				render_card(cardset, renderer, x_ch, y_ch, player_get_checked(&me));
 			}
@@ -825,7 +867,8 @@ static int side(Uint8 mode) {
 			players_zeroing(&player_ready, &finish_move, &step, &field, enemies, &me);
 			if (deck.card_count)
 				players_picking(&me, enemies, &deck, move, mode);
-			players_next_move(&me, enemies, pl, &move, mode, &check_finish);
+			if (players_next_move(&me, enemies, pl, &move, mode, &check_finish))
+				quit = 2;
 			continue;
 		}
 		if (step == FIGHT_STEP && pl != 3 && !finish_move) {
@@ -848,9 +891,19 @@ static int side(Uint8 mode) {
 			step = FIGHT_STEP;
 		}
 	}
-	cleanup("tttttrw", background, cardset, card_back1, card_back2, buttons, renderer, window);
+	cleanup("tttttrw", background, cardset, card_back1, card_back2, 
+		buttons, renderer, window);
+	for (i = 0; i < 3; i++) {
+		if (enemies[i].card_count)
+			card_list_free(&enemies[i].first_card);
+	}
+	if (me.card_count)
+		card_list_free(&me.first_card);
 	SDL_Quit();
-	return 0;
+	if (quit == 2)
+		return 0;
+	else
+		return 1;
 }
 int main(int argc, char* args[])
 {
@@ -859,58 +912,64 @@ int main(int argc, char* args[])
 	SDL_Event e;
 	Uint8 mode = 1;
 	SDL_Texture *start = NULL;
-	int quit = 0, width = SCREEN_WIDTH, heigth = SCREEN_HEIGHT;
-	if (SDL_Init(SDL_INIT_EVERYTHING) != 0){
-		logSDLError("SDL could not initialize!");
-		return 1;
-	}
-	window = SDL_CreateWindow("Lesson 2", 0,
-		30, width, heigth, SDL_WINDOW_SHOWN);
-	if (window == NULL){
-		SDL_Quit();
-		logSDLError("Window could not be created!");
-		return 1;
-	}
-	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED
-		| SDL_RENDERER_PRESENTVSYNC);
-	if (renderer == NULL){
-		logSDLError("Render could not be initialize");
-		SDL_Quit();
-		return 1;
-	}
-	start = loadTexture(START_PIC, renderer);
-	if (!start){
-		cleanup("trw", start, renderer, window);
-		SDL_Quit();
-		return 1;
-	}
-	while (!quit){
-		SDL_PollEvent(&e);
-		if (e.type == SDL_QUIT){
-			quit = 1;
+	int quit = 0, exit = 0, width = SCREEN_WIDTH, heigth = SCREEN_HEIGHT;
+	while (!exit) {
+		if (SDL_Init(SDL_INIT_EVERYTHING) != 0){
+			logSDLError("SDL could not initialize!");
+			return 1;
 		}
-		if (e.type == SDL_MOUSEBUTTONDOWN) {
-			if (e.button.x < 300) {
-				quit = 2;
-				mode = 1;
-			}
-			else if (e.button.x >= 300 && e.button.x < 600) {
-				quit = 2;
-				mode = 2;
-			}
-			else if (e.button.x >= 600) {
-				quit = 2;
-				mode = 3;
-			}
+		window = SDL_CreateWindow("Lesson 2", 0,
+			30, width, heigth, SDL_WINDOW_SHOWN);
+		if (window == NULL){
+			SDL_Quit();
+			logSDLError("Window could not be created!");
+			return 1;
 		}
-		SDL_RenderClear(renderer);
-		renderTexture_full(start, renderer, 0, 0);
-		SDL_RenderPresent(renderer);
+		renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED
+			| SDL_RENDERER_PRESENTVSYNC);
+		if (renderer == NULL){
+			logSDLError("Render could not be initialize");
+			SDL_Quit();
+			return 1;
+		}
+		start = loadTexture(START_PIC, renderer);
+		if (!start){
+			cleanup("trw", start, renderer, window);
+			SDL_Quit();
+			return 1;
+		}
+		SDL_EventState(SDL_MOUSEBUTTONDOWN, SDL_IGNORE);
+		SDL_EventState(SDL_MOUSEBUTTONDOWN, SDL_ENABLE);
+		while (!quit){
+			SDL_PollEvent(&e);
+			if (e.type == SDL_QUIT){
+				quit = 1;
+			}
+			if (e.type == SDL_MOUSEBUTTONDOWN) {
+				if (e.button.x < 300) {
+					quit = 2;
+					mode = 1;
+				}
+				else if (e.button.x >= 300 && e.button.x < 600) {
+					quit = 2;
+					mode = 2;
+				}
+				else if (e.button.x >= 600) {
+					quit = 2;
+					mode = 3;
+				}
+			}
+			SDL_RenderClear(renderer);
+			renderTexture_full(start, renderer, 0, 0);
+			SDL_RenderPresent(renderer);
+		}
+		cleanup("rw", renderer, window);
+		if (quit != 2) {
+			SDL_Quit();
+			return 0;
+		}
+		exit = side(mode);
+		quit = 0;
 	}
-	cleanup("rw", renderer, window);
-	if (quit != 2) {
-		SDL_Quit();
-		return 0;
-	}
-	return side(mode);
+	return 0;
 }
