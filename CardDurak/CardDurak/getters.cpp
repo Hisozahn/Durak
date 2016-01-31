@@ -7,16 +7,20 @@ Uint8 get_suit(Uint8 card_code) {
 	return card_code / 13;
 }
 Uint8 get_ingame_player(player_t* const player, player_t* const enemies, Uint8 move, Uint8 mode) {
-	int i;
+	Uint8 i;
 	for (i = move; i < mode; i++) {
-		if (enemies[i].in_game)
+		if (enemies[i].in_game) {
 			return i;
+		}
+			
 	}
-	if (player->in_game)
+	if (player->in_game) {
 		return 3;
+	}
 	for (i = 0; i < mode; i++) {
-		if (enemies[i].in_game)
+		if (enemies[i].in_game) {
 			return i;
+		}
 	}
 	return UINT8_MAX;
 }

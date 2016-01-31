@@ -13,7 +13,7 @@
 #define FORWARD_STEP 0
 #define FIGHT_STEP 1
 #define TIMER_REMOVING_TIME 20
-#define TIMER_DELAY ((33 / 10) * 1000 / 200)
+#define TIMER_DELAY (1000 / 150)
 #define RECTANGLE_H 30
 #define RECTANGLE_W 30
 #define NUM_OF_CARDS_IN_FIELD  6

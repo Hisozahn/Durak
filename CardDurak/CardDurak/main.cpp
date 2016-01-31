@@ -61,10 +61,18 @@ static int side(Uint8 mode) {
 	Uint8 movement = 0, move = 0, quit = 0, step = 0, finish_move = 0, player_ready = 0
 		,  button = 0, check_finish = 0, button_num = 0, click = 0;
 	Uint32 time = SDL_GetTicks();
+	SDL_Event sdlevent;
+	sdlevent.type = SDL_USEREVENT;
+	SDL_EventState(SDL_SYSWMEVENT, SDL_IGNORE);
+	SDL_EventState(SDL_KEYUP, SDL_IGNORE);
+	SDL_EventState(SDL_TEXTEDITING, SDL_IGNORE);
+	SDL_EventState(SDL_TEXTINPUT, SDL_IGNORE);
+	SDL_EventState(SDL_KEYMAPCHANGED, SDL_IGNORE);
+	SDL_EventState(SDL_MOUSEWHEEL, SDL_IGNORE);
 	sizes[0] = SCREEN_WIDTH;
 	sizes[1] = SCREEN_HEIGHT;
 	SDL_SetEventFilter((SDL_EventFilter)FilterEvents, sizes);
-	setup(&me, enemies, &deck, mode);
+	setup(&me, enemies, &deck, mode, &move);
 	field.trump = card_get(0, deck.first_card, deck.card_count);
 	field.trump = field.trump / 13;
 	if (SDL_Init(SDL_INIT_EVENTS | SDL_INIT_VIDEO) != 0){
@@ -99,11 +107,14 @@ static int side(Uint8 mode) {
 		Uint8 pl = get_ingame_player(&me, enemies, move, mode);
 		Uint8 check = get_field_beat(&field);
 		button_num = get_button_num(move, step, finish_move, &field, check, pl);
+		SDL_WaitEvent(&e);
 		SDL_PollEvent(&e);
+		printf("%d\n", e.type);
 		if (e.type == SDL_QUIT){
 			quit = 1;
 		}
 		else if (e.type == SDL_MOUSEBUTTONDOWN && me.checked == UINT8_MAX) {
+			SDL_PushEvent(&sdlevent);
 			if (!move || pl == 3) {
 				movement = 1;
 				button = e.button.button;
@@ -118,6 +129,7 @@ static int side(Uint8 mode) {
 		}
 		else if (e.type == SDL_MOUSEBUTTONUP && button == e.button.button) {
 			movement = click = 0;
+			SDL_PushEvent(&sdlevent);
 			if (!move) {
 				if (me.checked != UINT8_MAX && step == FORWARD_STEP) {
 					if (player_lay_card(e.button.x, e.button.y, sizes[0], sizes[1], &me, &field, pl, enemies) && e.button.button == SDL_BUTTON_LEFT)
@@ -134,6 +146,7 @@ static int side(Uint8 mode) {
 		}
 		else if (e.type == SDL_WINDOWEVENT)
 		{
+			SDL_PushEvent(&sdlevent);
 			if (e.window.event == SDL_WINDOWEVENT_SIZE_CHANGED) {
 				if (e.window.data1 < SCREEN_WIDTH)
 					sizes[0] = SCREEN_WIDTH;
@@ -147,6 +160,7 @@ static int side(Uint8 mode) {
 
 		}
 		else if (e.type == SDL_KEYDOWN && e.key.keysym.scancode == SDL_SCANCODE_SPACE){
+			SDL_PushEvent(&sdlevent);
 			button_click(move, &step, &field, &finish_move, &player_ready, &me.take, pl);
 		}
 		else if (e.type == SDL_MOUSEMOTION) {
@@ -174,6 +188,7 @@ static int side(Uint8 mode) {
 				players_picking(&me, enemies, &deck, move, mode);
 			if (players_next_move(&me, enemies, pl, &move, mode, &check_finish))
 				quit = 2;
+			SDL_PushEvent(&sdlevent);
 			continue;
 		}
 		if (step == FIGHT_STEP && pl != 3 && !finish_move) {
@@ -181,6 +196,7 @@ static int side(Uint8 mode) {
 			if (enemies[pl].take)
 				finish_move = 1;
 			step = FORWARD_STEP;
+			SDL_PushEvent(&sdlevent);
 		}
 		if (step == FORWARD_STEP && move && !finish_move) {
 			if (enemy_forward(&me, enemies, &field, move, mode)) {
@@ -194,6 +210,7 @@ static int side(Uint8 mode) {
 			else
 				check_finish = 0;
 			step = FIGHT_STEP;
+			SDL_PushEvent(&sdlevent);
 		}
 	}
 	cleanup("tttttrw", background, cardset, card_back1, card_back2, 

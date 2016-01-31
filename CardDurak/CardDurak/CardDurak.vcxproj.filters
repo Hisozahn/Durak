@@ -60,4 +60,17 @@
       <Filter>Заголовочные файлы</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <Library Include="..\Debug\SDL2main.lib">
+      <Filter>Файлы ресурсов</Filter>
+    </Library>
+    <Library Include="..\Debug\SDL2.lib">
+      <Filter>Файлы ресурсов</Filter>
+    </Library>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\Debug\SDL2.dll">
+      <Filter>Файлы ресурсов</Filter>
+    </None>
+  </ItemGroup>
 </Project>

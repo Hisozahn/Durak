@@ -1,0 +1,133 @@
+﻿Сборка начата 30.01.2016 15:47:34.
+     1>Проект "C:\Users\123\documents\visual studio 2013\Projects\CardDurak\CardDurak\CardDurak.vcxproj" в узле 2 (целевые объекты Build).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe /c /Zi /nologo /W1 /WX- /O2 /Gm- /EHsc /MD /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"x64\Release\\" /Fd"x64\Release\vc120.pdb" /Gd /TP /errorReport:prompt checking.cpp check_coords.cpp getters.cpp initialisation.cpp Intellect.cpp list_functions.cpp main.cpp mover.cpp rendering.cpp
+         checking.cpp
+         check_coords.cpp
+     1>check_coords.cpp(41): error C3861: player_get_checked: идентификатор не найден
+     1>check_coords.cpp(51): error C3861: player_card_pop: идентификатор не найден
+     1>check_coords.cpp(63): error C3861: player_get_checked: идентификатор не найден
+     1>check_coords.cpp(68): error C3861: get_suit: идентификатор не найден
+     1>check_coords.cpp(69): error C3861: get_card_price: идентификатор не найден
+     1>check_coords.cpp(69): error C3861: get_suit: идентификатор не найден
+     1>check_coords.cpp(70): error C3861: get_suit: идентификатор не найден
+     1>check_coords.cpp(72): error C3861: player_card_pop: идентификатор не найден
+         getters.cpp
+         initialisation.cpp
+         Intellect.cpp
+     1>Intellect.cpp(6): error C3861: card_get: идентификатор не найден
+     1>Intellect.cpp(7): error C3861: get_suit: идентификатор не найден
+     1>Intellect.cpp(7): error C3861: get_card_price: идентификатор не найден
+     1>Intellect.cpp(8): error C3861: get_card_price: идентификатор не найден
+     1>Intellect.cpp(9): error C3861: get_card_price: идентификатор не найден
+     1>Intellect.cpp(15): error C3861: card_get: идентификатор не найден
+     1>Intellect.cpp(16): error C3861: get_suit: идентификатор не найден
+     1>Intellect.cpp(17): error C3861: get_card_price: идентификатор не найден
+     1>Intellect.cpp(30): error C3861: card_get: идентификатор не найден
+     1>Intellect.cpp(31): error C3861: get_card_price: идентификатор не найден
+     1>Intellect.cpp(32): error C3861: get_suit: идентификатор не найден
+     1>Intellect.cpp(33): error C3861: get_card_price: идентификатор не найден
+     1>Intellect.cpp(39): error C3861: card_get: идентификатор не найден
+     1>Intellect.cpp(40): error C3861: get_card_price: идентификатор не найден
+     1>Intellect.cpp(41): error C3861: get_card_price: идентификатор не найден
+     1>Intellect.cpp(58): error C2660: enemy_get_min_by_suit: функция не принимает 3 аргументов
+     1>Intellect.cpp(58): error C3861: get_card_price: идентификатор не найден
+     1>Intellect.cpp(58): error C3861: get_suit: идентификатор не найден
+     1>Intellect.cpp(62): error C3861: card_get: идентификатор не найден
+     1>Intellect.cpp(63): error C3861: player_card_pop: идентификатор не найден
+     1>Intellect.cpp(65): error C3861: get_card_price: идентификатор не найден
+     1>Intellect.cpp(71): error C3861: get_ingame_player: идентификатор не найден
+     1>Intellect.cpp(81): error C3861: card_get: идентификатор не найден
+     1>Intellect.cpp(82): error C3861: player_card_pop: идентификатор не найден
+     1>Intellect.cpp(84): error C3861: get_card_price: идентификатор не найден
+         list_functions.cpp
+     1>list_functions.cpp(4): error C3861: create_card_list: идентификатор не найден
+     1>list_functions.cpp(15): error C3861: logSDLError: идентификатор не найден
+     1>list_functions.cpp(26): error C3861: get_card_count: идентификатор не найден
+     1>list_functions.cpp(27): error C3861: logSDLError: идентификатор не найден
+     1>list_functions.cpp(57): error C3861: get_card_count: идентификатор не найден
+     1>list_functions.cpp(61): error C3861: create_card_list: идентификатор не найден
+     1>list_functions.cpp(66): error C3861: get_card_count: идентификатор не найден
+         main.cpp
+     1>main.cpp(48): error C3861: logSDLError: идентификатор не найден
+     1>main.cpp(58): error C3861: create_sizes: идентификатор не найден
+     1>main.cpp(60): error C3861: create_enemies: идентификатор не найден
+     1>main.cpp(70): error C3861: setup: идентификатор не найден
+     1>main.cpp(71): error C3861: card_get: идентификатор не найден
+     1>main.cpp(74): error C3861: logSDLError: идентификатор не найден
+     1>main.cpp(81): error C3861: logSDLError: идентификатор не найден
+     1>main.cpp(87): error C3861: logSDLError: идентификатор не найден
+     1>main.cpp(97): error C3861: cleanup: идентификатор не найден
+     1>main.cpp(102): error C3861: get_ingame_player: идентификатор не найден
+     1>main.cpp(103): error C3861: get_field_beat: идентификатор не найден
+     1>main.cpp(104): error C3861: get_button_num: идентификатор не найден
+     1>main.cpp(113): error C3861: get_my_card_by_coordinates: идентификатор не найден
+     1>main.cpp(118): error C3861: button_click: идентификатор не найден
+     1>main.cpp(126): error C3861: player_lay_card: идентификатор не найден
+     1>main.cpp(132): error C3861: player_figth_card: идентификатор не найден
+     1>main.cpp(153): error C3861: button_click: идентификатор не найден
+     1>main.cpp(161): error C3861: renderTexture_tile: идентификатор не найден
+     1>main.cpp(162): error C3861: render_player: идентификатор не найден
+     1>main.cpp(163): error C3861: render_enemies: идентификатор не найден
+     1>main.cpp(164): error C3861: render_deck: идентификатор не найден
+     1>main.cpp(165): error C3861: render_field: идентификатор не найден
+     1>main.cpp(166): error C3861: render_button: идентификатор не найден
+     1>main.cpp(167): error C3861: renderMark: идентификатор не найден
+     1>main.cpp(169): error C3861: render_card: идентификатор не найден
+     1>main.cpp(169): error C3861: player_get_checked: идентификатор не найден
+     1>main.cpp(175): error C3861: players_zeroing: идентификатор не найден
+     1>main.cpp(177): error C3861: players_picking: идентификатор не найден
+     1>main.cpp(178): error C3861: players_next_move: идентификатор не найден
+     1>main.cpp(183): error C3861: enemy_fight: идентификатор не найден
+     1>main.cpp(189): error C3861: enemy_forward: идентификатор не найден
+     1>main.cpp(202): error C3861: cleanup: идентификатор не найден
+     1>main.cpp(206): error C3861: card_list_free: идентификатор не найден
+     1>main.cpp(209): error C3861: card_list_free: идентификатор не найден
+     1>main.cpp(226): error C3861: logSDLError: идентификатор не найден
+     1>main.cpp(233): error C3861: logSDLError: идентификатор не найден
+     1>main.cpp(239): error C3861: logSDLError: идентификатор не найден
+     1>main.cpp(245): error C3861: cleanup: идентификатор не найден
+     1>main.cpp(271): error C3861: renderTexture_full: идентификатор не найден
+     1>main.cpp(274): error C3861: cleanup: идентификатор не найден
+         mover.cpp
+     1>mover.cpp(5): error C3861: get_ingame_player: идентификатор не найден
+     1>mover.cpp(8): error C3861: player_card_push: идентификатор не найден
+     1>mover.cpp(8): error C3861: card_get: идентификатор не найден
+     1>mover.cpp(9): error C3861: player_card_pop: идентификатор не найден
+     1>mover.cpp(12): error C3861: player_card_push: идентификатор не найден
+     1>mover.cpp(12): error C3861: card_get: идентификатор не найден
+     1>mover.cpp(13): error C3861: player_card_pop: идентификатор не найден
+     1>mover.cpp(16): error C3861: player_card_push: идентификатор не найден
+     1>mover.cpp(16): error C3861: card_get: идентификатор не найден
+     1>mover.cpp(17): error C3861: player_card_pop: идентификатор не найден
+     1>mover.cpp(20): error C3861: player_card_push: идентификатор не найден
+     1>mover.cpp(20): error C3861: card_get: идентификатор не найден
+     1>mover.cpp(21): error C3861: player_card_pop: идентификатор не найден
+     1>mover.cpp(33): error C3861: player_card_push: идентификатор не найден
+     1>mover.cpp(40): error C3861: player_card_push: идентификатор не найден
+     1>mover.cpp(64): error C3861: get_ingame_player: идентификатор не найден
+     1>mover.cpp(67): error C3861: get_ingame_player: идентификатор не найден
+     1>mover.cpp(69): error C3861: get_ingame_player: идентификатор не найден
+     1>mover.cpp(71): error C3861: get_ingame_player: идентификатор не найден
+     1>mover.cpp(83): error C3861: player_card_push: идентификатор не найден
+     1>mover.cpp(100): error C3861: player_card_push: идентификатор не найден
+     1>mover.cpp(100): error C3861: card_get: идентификатор не найден
+     1>mover.cpp(102): error C3861: player_card_push: идентификатор не найден
+     1>mover.cpp(102): error C3861: card_get: идентификатор не найден
+     1>mover.cpp(104): error C3861: player_card_push: идентификатор не найден
+     1>mover.cpp(104): error C3861: card_get: идентификатор не найден
+     1>mover.cpp(106): error C3861: player_card_push: идентификатор не найден
+     1>mover.cpp(106): error C3861: card_get: идентификатор не найден
+     1>mover.cpp(108): error C3861: player_card_push: идентификатор не найден
+     1>mover.cpp(108): error C3861: card_get: идентификатор не найден
+     1>mover.cpp(109): error C3861: player_card_pop: идентификатор не найден
+         rendering.cpp
+     1>rendering.cpp(77): error C3861: card_get: идентификатор не найден
+     1>rendering.cpp(83): error C3861: card_get: идентификатор не найден
+     1>rendering.cpp(133): error C3861: card_get: идентификатор не найден
+         Создание кода...
+     1>Сборка проекта "C:\Users\123\documents\visual studio 2013\Projects\CardDurak\CardDurak\CardDurak.vcxproj" завершена (целевые объекты Build) с ошибкой.
+
+Ошибка сборки.
+
+Затраченное время: 00:00:01.25
